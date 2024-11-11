@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: secret
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.5
+    ports:
+      - "8080:8080"
+    environment:
+      KC_DB: postgres
+      KC_DB_USERNAME: app_user
+      KC_DB_PASSWORD: secret
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: adminpassword
+      KC_HTTP_ENABLED: "true"
+      KEYCLOAK_SSL_REQUIRED: none
+    depends_on:
+      - postgres
+    command: start
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000" # MinIO API
+      - "9001:9001" # MinIO Console
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: adminpassword
+    command: server /data --console-address ":9001"
+volumes:
+  db-data:

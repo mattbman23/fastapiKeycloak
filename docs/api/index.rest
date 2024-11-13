@@ -1,9 +1,9 @@
 @keycloakUrl=http://localhost:8080
-@keycloakRealm=<keycloakRealm>
-@keycloakClientId=<keycloakClientId>
-@keycloakSecret=<keycloakSecret>
+@keycloakRealm=demo
+@keycloakClientId=nextjs
+@keycloakSecret=9mBrIb6nGISAF1KW3GSOXUWzrLgPQVYE
 @baseUrl=http://localhost:8000
-@accessToken=<access_token>
+@accessToken=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ0Z25NbmFRRHRfQ1VONDJpUTQyOTJ0bVZSNndvZE9hUFZVbjVTbURrSXg0In0.eyJleHAiOjE3MzE1MTYwOTUsImlhdCI6MTczMTUxNTc5NSwianRpIjoiODVjNjBiYjAtMmZlNS00NTE2LWJjZWUtNzQwOWRiMDc4Yjc2IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9kZW1vIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjU0Y2FlMTMzLTgxMzktNDBlZS04OGRmLTVhNDg1ZTMxMzgyZiIsInR5cCI6IkJlYXJlciIsImF6cCI6Im5leHRqcyIsInNpZCI6IjMxZWU4MWY2LWQyYTYtNDZkNi05ZDg5LWMzYjk1ZjdlNmI1MyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDAwLyJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJhZG1pbiIsImRlZmF1bHQtcm9sZXMtZGVtbyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsibmV4dGpzIjp7InJvbGVzIjpbImFkbWluIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Im1hdHRoZXcgYnVkaW1hbiIsInByZWZlcnJlZF91c2VybmFtZSI6Im1hdHRoZXciLCJnaXZlbl9uYW1lIjoibWF0dGhldyIsImZhbWlseV9uYW1lIjoiYnVkaW1hbiIsImVtYWlsIjoibWF0dGhld0BidWRpbWFuLmNvbSJ9.Y-o5VoZs2PigDi-GzYqcW-Li1LBmMA_68mMP2aSxUbydl-IoCPp3SeNCuhIlQvZPO2E8Fwh8rbC54HZF08Sx0dMY7xb5wkA-SOjDSFqWcju_gPvXwmsZNADPeLAaYmOzOROddJebMclO98XN7pBymJSe-i72LzIbGHlqZ4YYI3K9_xmsEB86qwVZvv7-7tlzkmjRJKUDfT5rOrWAzx-6wwP8KYtVZs8Y30Ep0b-ES43uKf3G5t8L4zF0Sv1gaJVpZgWy5Zl7XmOLzS2Ea5aGNozYIH4x9lKRGHG20zPJ_jfLDeGZjTLKtYXZtaiE2rKeMtpMezM-NqfDYqgH_VtceA
 
 ### Get Access Token
 POST {{keycloakUrl}}/realms/{{keycloakRealm}}/protocol/openid-connect/token
@@ -30,3 +30,14 @@ Authorization: Bearer {{accessToken}}
 GET {{baseUrl}}/standard
 Authorization: Bearer {{accessToken}} 
  
+### Get todos
+GET {{baseUrl}}/todo
+
+### Create Todo
+POST {{baseUrl}}/todo
+Content-Type: application/json
+Authorization: Bearer {{accessToken}} 
+
+{
+    "task": "ccc"
+}

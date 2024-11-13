@@ -1,7 +1,7 @@
 import jwt
 
 from fastapi.security import OAuth2AuthorizationCodeBearer
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Request
 from typing import Annotated
 from jwt import PyJWKClient
 
@@ -18,7 +18,9 @@ oauth_2_scheme = OAuth2AuthorizationCodeBearer(
 )
 
 
-async def valid_access_token(access_token: Annotated[str, Depends(oauth_2_scheme)]):
+async def valid_access_token(
+    request: Request, access_token: Annotated[str, Depends(oauth_2_scheme)]
+):
     url = KEYCLOAK_CERT_URL
     jwks_client = PyJWKClient(url)
     try:
@@ -30,6 +32,7 @@ async def valid_access_token(access_token: Annotated[str, Depends(oauth_2_scheme
             audience="account",
             options={"verify_exp": True},
         )
+        request.state.user_data = data
         return data
     except jwt.exceptions.ExpiredSignatureError:
         raise HTTPException(status_code=498, detail="Token has expired")

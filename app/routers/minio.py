@@ -27,7 +27,7 @@ def list_objects():
 
 
 @router.post("/upload")
-async def download_object(file: UploadFile):
+async def upload_object(file: UploadFile):
     try:
         minio_client.put_object(
             bucket_name=minio_bucket,

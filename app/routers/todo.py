@@ -5,7 +5,7 @@ from schema.todo import TodoCreateSchema
 from utils.db import db_session
 from http import HTTPStatus
 
-router = APIRouter(prefix="/todo")
+router = APIRouter(prefix="/todo", tags=["Todo"])
 
 
 @router.get("/")
@@ -29,3 +29,9 @@ async def create_todo(
 
     new_todo = await TodoService(session).create_todo(todo_data)
     return new_todo
+
+
+@router.delete("/", status_code=HTTPStatus.OK)
+async def delete_todo(todo_id: int, session: AsyncSession = Depends(db_session)):
+    await TodoService(session).delete_todo(todo_id)
+    return "success"

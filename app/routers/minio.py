@@ -1,6 +1,9 @@
-from fastapi import APIRouter, UploadFile, HTTPException
+from fastapi import APIRouter, UploadFile, HTTPException, Depends
+from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi.responses import StreamingResponse
 from minio.error import S3Error
+from services.todoService import TodoService
+from utils.db import db_session
 from minio import Minio
 from utils import config
 
@@ -27,16 +30,20 @@ def list_objects():
 
 
 @router.post("/upload")
-async def upload_object(file: UploadFile):
+async def upload_object(
+    file: UploadFile, id: int, session: AsyncSession = Depends(db_session)
+):
     try:
-        minio_client.put_object(
+        asset = minio_client.put_object(
             bucket_name=minio_bucket,
             object_name=file.filename,
             data=file.file,
             length=-1,
             part_size=10 * 1024 * 1024,
         )
-
+        await TodoService(session).update_todo(
+            todo_id=id, resource_path=asset.object_name
+        )
         return {"message": "File uploaded successfully"}
     except Exception as e:
         return {"error": str(e)}

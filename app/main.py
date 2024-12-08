@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from utils import auth
-from routers import minio, todo
+from routers import minio, todo, wxai
 from utils.logger import logger
 from utils.db import init_db
 
@@ -33,6 +33,7 @@ def get_public():
 # only authenticated users can access the route, need to pass valid jwt to header
 app.include_router(minio.router, dependencies=[Depends(auth.valid_access_token)])
 app.include_router(todo.router, dependencies=[Depends(auth.valid_access_token)])
+app.include_router(wxai.router)
 
 
 # only users with admin role can access
